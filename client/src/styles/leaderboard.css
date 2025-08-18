@@ -1,0 +1,30 @@
+/* Leaderboard Specific Styles */
+.circular-chart {
+  display: block;
+  max-width: 100%;
+}
+
+.circle {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dasharray 1s ease;
+}
+
+.circle-bg {
+  opacity: 0.3;
+}
+
+.percentage {
+  fill: #FED775;
+  font-size: 0.25rem;
+  text-anchor: middle;
+  font-weight: bold;
+  dominant-baseline: middle;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .leaderboard-card {
+    padding: 1rem 0.75rem;
+  }
+}
