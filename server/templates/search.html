@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search for Songs</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+            .search-box {
+                display: flex;
+                margin-bottom: 20px;
+            }
+            .search-input {
+                flex-grow: 1;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px 0 0 4px;
+                font-size: 16px;
+            }
+            .search-btn {
+                padding: 10px 15px;
+                background-color: #4CAF50;
+                color: white;
+                border: 1px solid #4CAF50;
+                border-radius: 0 4px 4px 0;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .search-btn:hover {
+                background-color: #45a049;
+            }
+            .back-link {
+                margin-top: 20px;
+                display: inline-block;
+                color: #4CAF50;
+                text-decoration: none;
+            }
+            .back-link:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>🔍 Search for Songs</h2>
+            <form action="/search-results/" method="get">
+                <div class="search-box">
+                    <input type="text" name="query" placeholder="Search for a song or artist" class="search-input" required>
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+            <a href="/" class="back-link">⬅️ Back to Karaoke</a>
+        </div>
+    </body>
+</html>

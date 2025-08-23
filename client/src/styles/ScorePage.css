@@ -1,0 +1,128 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(224, 231, 255, 0.6);
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.animate-highlight {
+  animation: highlight 1s ease;
+}
+
+/* SVG Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom animation for music notes */
+@keyframes musicNote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(20px, -50px) rotate(20deg);
+  }
+}
+
+.animate-music-note {
+  animation: musicNote 2s ease-out infinite;
+}
+
+.animate-music-note-delay {
+  animation: musicNote 2s ease-out 0.5s infinite;
+}
+
+/* Confetti animations */
+@keyframes confetti1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-30px, 60px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(30px, 60px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti3 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, 80px);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti4 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-20px, 70px) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti-1 {
+  animation: confetti1 3s ease-out infinite;
+}
+
+.animate-confetti-2 {
+  animation: confetti2 2.5s ease-out infinite;
+}
+
+.animate-confetti-3 {
+  animation: confetti3 3.5s ease-out infinite;
+}
+
+.animate-confetti-4 {
+  animation: confetti4 3s ease-out infinite;
+}

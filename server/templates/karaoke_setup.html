@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Karaoke Setup</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-control {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                background-color: #4CAF50;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .btn:hover {
+                background-color: #45a049;
+            }
+            .song-info {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f0f0f0;
+            }
+            .nav-links {
+                margin-top: 20px;
+            }
+            .action-link {
+                display: inline-block;
+                margin-right: 10px;
+                color: #4CAF50;
+                text-decoration: none;
+            }
+            .action-link:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>🎤 Karaoke Setup</h2>
+            
+            <div class="song-info">
+                <p>You've selected: <b>{{song.title}}</b> by <b>{{artists}}</b></p>
+            </div>
+            
+            <form action="/compare/" enctype="multipart/form-data" method="post">
+                <input type="hidden" name="song_id" value="{{song.id}}">
+                <input type="hidden" name="song_title" value="{{song.title}}">
+                <input type="hidden" name="song_artist" value="{{artists}}">
+                
+                <div class="form-group">
+                    <label>Upload Original Song:</label><br>
+                    <input type="file" name="song" required class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload Your Singing:</label><br>
+                    <input type="file" name="player" required class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label>Show Plot:</label>
+                    <input type="checkbox" name="plot">
+                </div>
+                
+                <button type="submit" class="btn">Compare</button>
+            </form>
+            
+            <div class="nav-links">
+                <a href="/song-details/{{song.id}}" class="action-link">⬅️ Back to Song Details</a> | 
+                <a href="/search/" class="action-link">⬅️ Back to Search</a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -11,6 +11,9 @@ import TestimonialSection from "./sections/TestimonialSection";
 import FooterSection from "./sections/FooterSection";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import MusicBrowsePage from "./pages/MusicBrowsePage";
+import ChallengePage from "./pages/ChallengePage";
+import GamePage from "./pages/GamePage";
+import ScorePage from "./pages/ScorePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -51,6 +54,9 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/music" element={<MusicBrowsePage />} />
+          <Route path="/challenge/:songId" element={<ChallengePage />} />
+          <Route path="/game/:songId" element={<GamePage />} />
+          <Route path="/score/:songId" element={<ScorePage />} />
         </Routes>
       </main>
     </Router>

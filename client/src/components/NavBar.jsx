@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import WalletWrapper from "./WalletWrapper";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +56,10 @@ const NavBar = () => {
             About
           </a>
           <button className="hero-button small">
-            <p>Connect Wallet</p>
+          <WalletWrapper
+                text="Log in"
+                withWalletAggregator={true}
+              />
           </button>
         </div>
 
@@ -94,9 +98,13 @@ const NavBar = () => {
             <a href="#about" className="mobile-nav-link">
               About
             </a>
-            <button className="hero-button mt-4">
-              <p>Connect Wallet</p>
-            </button>
+            {/* <button className="hero-button mt-4"> */}
+<WalletWrapper
+      text="Log in"
+      withWalletAggregator={true}
+    />
+
+            {/* </button> */}
           </div>
         </div>
       </div>

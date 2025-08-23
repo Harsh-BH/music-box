@@ -1,42 +1,64 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { SplitText } from "gsap/all";
 import { useState, useRef, useEffect } from "react";
-import { musicTracks } from "../constants/musicData";
+import { useNavigate } from "react-router-dom";
+import { searchSongs } from "../services/api";
+import LoadingSVG from "../components/svgs/LoadingSVG";
 
 const MusicBrowsePage = () => {
   const [activeGenre, setActiveGenre] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredTracks, setFilteredTracks] = useState(musicTracks);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const searchInputRef = useRef(null);
   const containerRef = useRef(null);
+  const navigate = useNavigate();
   
-  // Filter tracks based on genre and search term
+  // Debounced search function
   useEffect(() => {
-    let results = musicTracks;
+    const delayDebounce = setTimeout(() => {
+      if (searchTerm.length >= 2) {
+        performSearch(searchTerm);
+      } else if (searchTerm.length === 0) {
+        // Clear results if search is empty
+        setSearchResults([]);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
+  
+  const performSearch = async (query) => {
+    setIsLoading(true);
+    setError(null);
     
-    if (activeGenre !== "all") {
-      results = results.filter(track => track.genre === activeGenre);
+    try {
+      const response = await searchSongs(query);
+      if (response.error) {
+        setError(response.error);
+        setSearchResults([]);
+      } else {
+        setSearchResults(response.results || []);
+      }
+    } catch (err) {
+      setError("Failed to search songs. Please try again.");
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
     }
-    
-    if (searchTerm) {
-      results = results.filter(track => 
-        track.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        track.artist.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    
-    setFilteredTracks(results);
-  }, [activeGenre, searchTerm]);
+  };
+  
+  // Filter by genre (client-side)
+  const filteredTracks = activeGenre === "all" 
+    ? searchResults 
+    : searchResults.filter(track => {
+        // Assuming genre info is available in the releases or we could implement a simple genre classifier
+        return track.genres?.includes(activeGenre) || true; // Temporary - remove true when genre data is available
+      });
   
   // GSAP Animations
   useGSAP(() => {
-    // ...existing code...
-  }, [filteredTracks]);
-
-  const handleGenreChange = (genre) => {
-    setActiveGenre(genre);
-    
     gsap.fromTo(
       ".music-card",
       { y: 20, opacity: 0 },
@@ -49,10 +71,18 @@ const MusicBrowsePage = () => {
         delay: 0.1,
       }
     );
+  }, [filteredTracks]);
+
+  const handleGenreChange = (genre) => {
+    setActiveGenre(genre);
   };
 
   const focusSearchInput = () => {
     searchInputRef.current.focus();
+  };
+
+  const handleSongSelect = (song) => {
+    navigate(`/challenge/${song.id}`);
   };
 
   return (
@@ -116,24 +146,35 @@ const MusicBrowsePage = () => {
           />
         </div>
         
-        {filteredTracks.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <LoadingSVG size={100} className="mb-6" />
+            <p className="text-dark-brown">Searching for songs...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <h3 className="text-red-600 text-xl">{error}</h3>
+            <p className="text-dark-brown/70 mt-2">Please try again or check your connection</p>
+          </div>
+        ) : searchTerm.length < 2 && searchResults.length === 0 ? (
+          <div className="text-center py-16">
+            <h3 className="text-dark-brown text-xl">Start typing to search for songs</h3>
+            <p className="text-dark-brown/70 mt-2">Enter at least 2 characters</p>
+          </div>
+        ) : searchResults.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
             {filteredTracks.map((track, index) => (
-              <MusicCard key={index} track={track} />
+              <MusicCard 
+                key={track.id || index} 
+                track={track} 
+                onSelect={() => handleSongSelect(track)}
+              />
             ))}
           </div>
         ) : (
           <div className="text-center py-16">
             <h3 className="text-dark-brown text-xl">No songs found</h3>
             <p className="text-dark-brown/70 mt-2">Try adjusting your search or filters</p>
-          </div>
-        )}
-        
-        {filteredTracks.length > 0 && (
-          <div className="mt-16 flex justify-center">
-            <button className="hero-button">
-              <p>Load More</p>
-            </button>
           </div>
         )}
       </div>
@@ -158,16 +199,30 @@ const GenreTab = ({ label, isActive, onClick }) => {
 };
 
 // Music card component
-const MusicCard = ({ track }) => {
+const MusicCard = ({ track, onSelect }) => {
+  // Format artist names
+  const artistNames = track.artists ? track.artists.map(a => a.name).join(", ") : "Unknown Artist";
+  
+  // Get cover art if available
+  const coverArt = track.releases && track.releases[0]?.coverArt 
+    ? track.releases[0].coverArt 
+    : "https://via.placeholder.com/300?text=No+Cover";
+  
+  // Calculate difficulty (could be more sophisticated)
+  const difficulty = "Medium"; // Placeholder
+  
   return (
-    <div className="music-card bg-milk/80 shadow-md backdrop-blur-md rounded-xl overflow-hidden hover:shadow-lg hover:shadow-yellow-brown/20 transition-all duration-300">
+    <div 
+      className="music-card bg-milk/80 shadow-md backdrop-blur-md rounded-xl overflow-hidden hover:shadow-lg hover:shadow-yellow-brown/20 transition-all duration-300 cursor-pointer"
+      onClick={onSelect}
+    >
       <div className="relative aspect-square overflow-hidden">
         <img 
-          src={track.coverArt} 
+          src={coverArt} 
           alt={track.title} 
           className="card-image w-full h-full object-cover transition-all duration-300"
         />
-        <div className="play-button opacity-0 scale-90 absolute inset-0 flex items-center justify-center bg-black/50 transition-all duration-300">
+        <div className="play-button opacity-0 scale-90 absolute inset-0 flex items-center justify-center bg-black/50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100">
           <div className="w-16 h-16 rounded-full bg-yellow-brown flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="text-milk" viewBox="0 0 16 16">
               <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
@@ -175,22 +230,20 @@ const MusicCard = ({ track }) => {
           </div>
         </div>
         <div className="absolute top-3 right-3 bg-yellow-brown text-milk px-2 py-1 text-xs font-bold rounded">
-          {track.difficulty}
+          {difficulty}
         </div>
       </div>
       <div className="p-4">
-        <h3 className="text-dark-brown font-medium text-lg truncate">{track.title}</h3>
-        <p className="text-dark-brown/70 text-sm">{track.artist}</p>
+        <h3 className="text-dark-brown font-medium text-lg truncate">{track.title || "Untitled"}</h3>
+        <p className="text-dark-brown/70 text-sm">{artistNames}</p>
         <div className="flex justify-between items-center mt-3">
           <div className="flex items-center gap-1.5">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="text-yellow-brown" viewBox="0 0 16 16">
               <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
             </svg>
-            <span className="text-dark-brown text-xs font-medium">{track.performances} performances</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <img src="/images/eth-icon.svg" alt="ETH" className="w-3 h-3" />
-            <span className="text-dark-brown text-xs font-medium">{track.earnings} earned</span>
+            <span className="text-dark-brown text-xs font-medium">
+              {track.length?.formatted || "Unknown"}
+            </span>
           </div>
         </div>
       </div>

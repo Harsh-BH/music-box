@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Karaoke Results</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+            .score {
+                font-size: 24px;
+                font-weight: bold;
+                color: #4CAF50;
+                margin: 20px 0;
+            }
+            .plot-container {
+                margin: 20px 0;
+                text-align: center;
+            }
+            .plot-img {
+                max-width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            .song-info {
+                margin-bottom: 20px;
+                color: #555;
+            }
+            .nav-links {
+                margin-top: 20px;
+            }
+            .action-link {
+                display: inline-block;
+                margin-right: 10px;
+                color: #4CAF50;
+                text-decoration: none;
+            }
+            .action-link:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>✅ Pitch Alignment Results</h2>
+            
+            {% if song_title %}
+            <div class="song-info">
+                <p>Song: <b>{{song_title}}</b> by <b>{{song_artist}}</b></p>
+            </div>
+            {% endif %}
+            
+            <div class="score">
+                Score: {{score}}%
+            </div>
+            
+            {% if img_base64 %}
+            <div class="plot-container">
+                <img src="data:image/png;base64,{{img_base64}}" alt="Pitch Plot" class="plot-img"/>
+            </div>
+            {% endif %}
+            
+            <div class="nav-links">
+                <a href="/" class="action-link">⬅️ Try Again</a>
+                {% if song_id %}
+                | <a href="/song-details/{{song_id}}" class="action-link">View Song Details</a>
+                {% endif %}
+            </div>
+        </div>
+    </body>
+</html>

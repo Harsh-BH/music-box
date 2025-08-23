@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Karaoke Pitch Comparison</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                background-color: #4CAF50;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .btn:hover {
+                background-color: #45a049;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-control {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>🎤 Music Box - Karaoke App</h2>
+            
+            <div style="margin: 20px 0;">
+                <a href="/search/" class="btn">
+                    🔍 Search for Songs
+                </a>
+            </div>
+            
+            <h3>Or upload your own files:</h3>
+            <form action="/compare/" enctype="multipart/form-data" method="post">
+                <div class="form-group">
+                    <label>Original Song:</label><br>
+                    <input type="file" name="song" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Singing:</label><br>
+                    <input type="file" name="player" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label>Show Plot:</label>
+                    <input type="checkbox" name="plot">
+                </div>
+                
+                <button type="submit" class="btn">Compare</button>
+            </form>
+        </div>
+    </body>
+</html>

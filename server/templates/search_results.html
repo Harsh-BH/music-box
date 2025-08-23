@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search Results</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .result {
+                border: 1px solid #ddd;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
+            .result:hover {
+                background-color: #f0f0f0;
+            }
+            .title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #333;
+            }
+            .artist {
+                color: #555;
+                margin-bottom: 8px;
+            }
+            .details {
+                margin-top: 10px;
+                font-size: 14px;
+                color: #777;
+            }
+            .actions {
+                margin-top: 10px;
+            }
+            .action-link {
+                display: inline-block;
+                margin-right: 10px;
+                color: #4CAF50;
+                text-decoration: none;
+            }
+            .action-link:hover {
+                text-decoration: underline;
+            }
+            .nav-links {
+                margin-top: 20px;
+            }
+            .query-info {
+                margin-bottom: 20px;
+                color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>🎵 Search Results</h2>
+            <div class="query-info">
+                Found {{count}} results for: <b>{{query}}</b>
+            </div>
+            
+            {% if not results %}
+            <p>No songs found matching your query.</p>
+            {% else %}
+                {% for song in results %}
+                <div class="result">
+                    <div class="title">{{song.title}}</div>
+                    <div class="artist">by {{song.artist_names}}</div>
+                    <div class="details">
+                        Length: {{song.length_min}}:{{song.length_sec}}
+                        {% if song.release_info %}
+                        <br>{{song.release_info}}
+                        {% endif %}
+                    </div>
+                    <div class="actions">
+                        <a href="/song-details/{{song.id}}" class="action-link">View Details</a> | 
+                        <a href="/karaoke-setup/{{song.id}}" class="action-link">Use for Karaoke</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="nav-links">
+                <a href="/search/" class="action-link">⬅️ New Search</a> | 
+                <a href="/" class="action-link">⬅️ Back to Karaoke</a>
+            </div>
+        </div>
+    </body>
+</html>
