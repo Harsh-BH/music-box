@@ -172,25 +172,3 @@ class YouTubeHandler:
             return {'error': str(e)}
 
 
-# Example usage
-if __name__ == "__main__":
-    handler = YouTubeHandler()
-    
-    # Search example
-    print("Searching for videos...")
-    results = handler.search_youtube("Coldplay Viva La Vida")
-    print(f"Found {len(results)} videos")
-    
-    if results:
-        # Get the first result
-        video_id = results[0]['id']
-        print(f"Selected video ID: {video_id}")
-        
-        # Get streaming info
-        stream_info = handler.get_stream_info(video_id)
-        print(f"Stream info: {stream_info}")
-        
-        # Download the audio
-        print("Downloading audio...")
-        download_info = handler.download_audio(video_id)
-        print(f"Download info: {download_info}")
